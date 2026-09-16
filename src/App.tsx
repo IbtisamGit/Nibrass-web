@@ -4,16 +4,185 @@ import { supabase } from './supabaseClient';
 import Auth from './components/Auth';
 import LessonForm from './components/LessonForm';
 import LessonView from './components/LessonView';
-import { GraduationCap, LayoutDashboard, LogOut, Settings, BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { GraduationCap, LayoutDashboard, LogOut, Settings, BookOpen, ChevronLeft, ChevronRight, Loader2, BrainCircuit } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 
-// --- Placeholder Pages for Dashboard ---
-const DashboardOverview = () => (
-  <div className="bg-white border border-gray-200 rounded-2xl h-64 flex flex-col items-center justify-center shadow-sm">
-    <LayoutDashboard className="w-12 h-12 text-gray-300 mb-4" />
-    <p className="text-gray-400 font-medium text-lg">Your charts and progress will appear here.</p>
-  </div>
+// استيراد مكتبة الرسوم البيانية Chart.js
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 );
+
+// --- Real Dashboard Overview Component with Charts ---
+const DashboardOverview = () => {
+  const [stats, setStats] = useState({ totalLessons: 0 });
+  const [recentLessons, setRecentLessons] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('lessons')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data) {
+          setStats({ totalLessons: data.length });
+          setRecentLessons(data.slice(0, 4));
+
+          // تحليل التصنيفات للرسم البياني
+          const categoryCounts = data.reduce((acc: any, lesson: any) => {
+            const cat = lesson.category || 'Uncategorized';
+            acc[cat] = (acc[cat] || 0) + 1;
+            return acc;
+          }, {});
+
+          setChartData({
+            labels: Object.keys(categoryCounts),
+            datasets: [
+              {
+                label: 'Lessons Generated',
+                data: Object.values(categoryCounts),
+                backgroundColor: 'rgba(79, 70, 229, 0.85)',
+                borderRadius: 6,
+                hoverBackgroundColor: 'rgba(67, 56, 202, 1)',
+              },
+            ],
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching overview data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 } },
+    },
+  };
+
+  return (
+    <div className="space-y-8 pb-8">
+      {/* قسم الإحصائيات السريعة */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+          <div className="w-14 h-14 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+            <BookOpen className="w-7 h-7" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-500">Total Lessons</p>
+            <p className="text-2xl font-extrabold text-gray-900">{stats.totalLessons}</p>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+          <div className="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
+            <BrainCircuit className="w-7 h-7" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-500">AI Generations</p>
+            <p className="text-2xl font-extrabold text-gray-900">{stats.totalLessons}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* قسم الرسم البياني والنشاطات */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        {/* الرسم البياني */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
+          <h3 className="text-lg font-bold text-gray-800 mb-6">Lessons by Category</h3>
+          <div className="flex-1 min-h-[250px]">
+            {chartData && stats.totalLessons > 0 ? (
+              <Bar data={chartData} options={chartOptions} />
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                Not enough data for charts yet.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* أحدث النشاطات */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+          <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 className="text-lg font-bold text-gray-800">Recent Activity</h3>
+            <button 
+              onClick={() => navigate('/dashboard/lessons')} 
+              className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+            >
+              View All
+            </button>
+          </div>
+          <div className="divide-y divide-gray-50 flex-1 overflow-y-auto">
+            {recentLessons.length === 0 ? (
+              <div className="p-6 text-center text-gray-500 h-full flex items-center justify-center">No lessons generated yet.</div>
+            ) : (
+              recentLessons.map(lesson => (
+                <div key={lesson.id} className="p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 flex-shrink-0">
+                      <BookOpen className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold text-gray-900 truncate">{lesson.topic}</p>
+                      <p className="text-xs text-gray-500 truncate">{lesson.category} • {new Date(lesson.created_at).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => navigate(`/dashboard/lessons/${lesson.id}`)}
+                    className="px-4 py-2 text-xs font-bold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors ml-2"
+                  >
+                    Review
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
 
 // --- Real MyLessons Component ---
 const MyLessons = () => {
