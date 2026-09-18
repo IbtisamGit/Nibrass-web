@@ -430,6 +430,11 @@ const MyLessons = () => {
 // --- 3. SettingsPage Component (Redesigned & Functional with Upload) ---
 // --- 3. SettingsPage Component (Redesigned & Functional with Upload + Reset Password) ---
 const SettingsPage = () => {
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+  const [updatingPassword, setUpdatingPassword] = useState(false);
+
+
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [newUsername, setNewUsername] = useState('');
@@ -540,7 +545,24 @@ const SettingsPage = () => {
       </div>
     );
   }
-
+    const handleUpdatePassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+    setUpdatingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+      alert("Password updated successfully!");
+      setNewPassword('');
+      setIsEditingPassword(false); // إغلاق المربع بعد النجاح
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setUpdatingPassword(false);
+    }
+  };
   return (
     <div className="max-w-3xl mx-auto pb-12">
       <div className="mb-8">
@@ -639,17 +661,63 @@ const SettingsPage = () => {
                 </div>
               </div>
 
-              {/* Security & Password Reset Section */}
-              <div className="flex flex-col sm:flex-row items-center justify-between p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
-                <div>
-                  <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-1">Password & Security</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Receive an email containing a secure link to reset your password.</p>
+              {/* Security & Password Update Section */}
+                            {/* Security & Password Update Section */}
+              <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" /> Password & Security
+                    </h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Update your password to keep your account secure.</p>
+                  </div>
+                  
+                  {/* زر التغيير يظهر فقط إذا كان الحقل مخفياً */}
+                  {!isEditingPassword && (
+                    <button 
+                      onClick={() => setIsEditingPassword(true)}
+                      className="px-6 py-2.5 bg-transparent border-2 border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all whitespace-nowrap"
+                    >
+                      Change Password
+                    </button>
+                  )}
                 </div>
-                <button 
-                  onClick={handleResetPassword}
-                  className="mt-4 sm:mt-0 px-6 py-2.5 bg-transparent border-2 border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all whitespace-nowrap">
-                  Reset Password
-                </button>
+                
+                {/* حقل الإدخال يظهر فقط عند الضغط على الزر */}
+                {isEditingPassword && (
+                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex-1 w-full">
+                      <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">New Password</label>
+                      <input 
+                        type="password" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Enter new password (min 6 chars)"
+                        className="w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors" 
+                      />
+                    </div>
+                    <div className="flex w-full sm:w-auto gap-3">
+                      <button 
+                        onClick={() => {
+                          setIsEditingPassword(false);
+                          setNewPassword(''); // تفريغ الحقل عند الإلغاء
+                        }}
+                        disabled={updatingPassword}
+                        className="flex-1 sm:flex-none px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={handleUpdatePassword}
+                        disabled={updatingPassword || newPassword.length < 6}
+                        className="flex-1 sm:flex-none px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {updatingPassword ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="pt-4 flex justify-end">
@@ -732,7 +800,8 @@ const SettingsPage = () => {
 };
 
 // --- Learn Route ---
-const LearnLayout = () => {
+// --- Learn Route ---
+const LearnLayout = ({ session }: { session: Session | null }) => {
   const navigate = useNavigate();
 
   return (
@@ -742,8 +811,15 @@ const LearnLayout = () => {
           <GraduationCap className="w-8 h-8" />
           <span className="text-xl font-bold text-gray-900 dark:text-white">AI Learning</span>
         </div>
-        <Link to="/dashboard" className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-          Back to Dashboard
+        
+        {/* التعديل هنا: فحص هل هو مسجل دخول أم ضيف */}
+        {/* زر العودة بتصميم احترافي مع سهم */}
+        <Link 
+          to={session ? "/dashboard" : "/"} 
+          className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-800 font-bold text-sm rounded-xl transition-all shadow-sm border border-gray-200 dark:border-gray-700"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {session ? "Dashboard" : "Back to Registration"}
         </Link>
       </nav>
       <main className="max-w-4xl mx-auto px-6 py-12 flex flex-col items-center justify-center min-h-[80vh]">
@@ -906,7 +982,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={session ? <Navigate to="/dashboard" replace /> : <Auth />} />
-        <Route path="/learn" element={session ? <LearnLayout /> : <Navigate to="/" replace />} />
+                <Route path="/learn" element={<LearnLayout session={session} />} />
         <Route path="/dashboard" element={session ? <DashboardLayout session={session} /> : <Navigate to="/" replace />}>
           <Route index element={<DashboardOverview />} />
           <Route path="lessons" element={<MyLessons />} />
