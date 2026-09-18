@@ -1,6 +1,5 @@
 @import "tailwindcss";
-
-@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 .perspective-1000 {
   perspective: 1000px;
