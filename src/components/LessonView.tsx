@@ -191,7 +191,7 @@ const LessonView = () => {
   const contentSections = lesson.content_sections || [];
 
   return (
-    <div className="max-w-5xl mx-auto pb-12">
+    <div className="w-full px-6 lg:px-12 pb-12">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate('/dashboard/lessons')} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100">
@@ -204,7 +204,7 @@ const LessonView = () => {
         </div>
       </div>
 
-      <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1.5 shadow-sm border border-gray-100 dark:border-gray-700 mb-8 overflow-x-auto whitespace-nowrap">
+      <div className="flex max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-2xl p-1.5 shadow-sm border border-gray-100 dark:border-gray-700 mb-8 overflow-x-auto whitespace-nowrap">
         <button onClick={() => setActiveTab('content')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'content' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
           <BookOpen className="w-4 h-4" /> Lesson Content
         </button>
@@ -216,11 +216,8 @@ const LessonView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 md:p-8 h-auto min-h-[500px]">
-        
-        {/* ===================== CONTENT TAB (PREMIUM LAYOUT) ===================== */}
-        {activeTab === 'content' && (
-          <div className="flex flex-col md:flex-row gap-8 lg:gap-16 relative">
+      <div className="w-full bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 md:p-8 h-auto min-h-[500px]">        {activeTab === 'content' && (
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8 lg:gap-12 relative items-start">
             <style>{`
               @keyframes fadeInSlideUp {
                 from { opacity: 0; transform: translateY(8px); }
@@ -234,7 +231,7 @@ const LessonView = () => {
             {contentSections && contentSections.length > 0 ? (
               <>
                 {/* Left Sidebar (Journey Stepper) */}
-                <div className="w-full md:w-1/3 lg:w-1/4 shrink-0">
+                <div className="w-full">
                   <div className="sticky top-28">
                     <h3 className="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-6 flex items-center gap-2">
                       <BookOpen className="w-4 h-4" /> Learning Path
@@ -279,96 +276,99 @@ const LessonView = () => {
                 </div>
 
                 {/* Right Area (Premium Prose) */}
-                <div className="flex-1 w-full min-w-0 max-w-3xl">
-                  <div key={activeSectionIndex} className="animate-fade-in-up">
-                    <div className="mb-8 pt-2">
-                      <span className="inline-block px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold uppercase tracking-widest rounded-full mb-4">
-                        Section {activeSectionIndex + 1} of {contentSections.length}
-                      </span>
-                      <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white leading-tight py-1">
-                        {contentSections[activeSectionIndex]?.section_title}
-                      </h2>
-                    </div>
-                    
-                    {/* تم تطبيق الكلاسات النظيفة المخصصة للمقالات وأكواد البرمجة كما طلبت بالضبط */}
-                    <div className="prose prose-lg prose-indigo max-w-none dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
-                      <ReactMarkdown
-                        components={{
-                          h1: ({ node, ...props }) => <h1 className="text-3xl font-extrabold mt-8 mb-4 text-gray-900 dark:text-white leading-tight" {...props} />,
-                          h2: ({ node, ...props }) => <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-2 leading-snug" {...props} />,
-                          h3: ({ node, ...props }) => <h3 className="text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white leading-snug" {...props} />,
-                          p: ({ node, ...props }) => <p className="mb-5 text-gray-600 dark:text-gray-300 leading-[1.8]" {...props} />,
-                          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-6 space-y-2 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
-                          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-6 space-y-2 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
-                          li: ({ node, ...props }) => <li className="leading-[1.8] pl-1" {...props} />,
-                          strong: ({ node, ...props }) => <strong className="font-extrabold text-indigo-900 dark:text-indigo-300 bg-indigo-50/50 dark:bg-indigo-900/20 px-1 rounded" {...props} />,
-                          code: ({ node, inline, className, children, ...props }: any) => {
-                            const match = /language-(\w+)/.exec(className || '');
-                            return !inline ? (
-                              <div className="my-6 rounded-xl overflow-hidden bg-[#0d1117] shadow-lg border border-gray-800">
-                                <div className="px-4 py-2 bg-[#161b22] border-b border-gray-800 text-xs font-mono text-gray-400 flex items-center gap-2">
-                                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                                  <span className="ml-2 uppercase tracking-wider">{match ? match[1] : 'Code'}</span>
+                  <div className="w-full min-w-0">
+                    <div className="w-full max-w-5xl">
+                    <div key={activeSectionIndex} className="animate-fade-in-up">
+                      <div className="mb-8 pt-2">
+                        <span className="inline-block px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold uppercase tracking-widest rounded-full mb-4">
+                          Section {activeSectionIndex + 1} of {contentSections.length}
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white leading-tight py-1">
+                          {contentSections[activeSectionIndex]?.section_title}
+                        </h2>
+                      </div>
+                      
+                      <div className="prose prose-lg prose-indigo max-w-none dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
+                        <ReactMarkdown
+                          components={{
+                            h1: ({ node, ...props }) => <h1 className="text-3xl font-extrabold mt-8 mb-4 text-gray-900 dark:text-white leading-tight" {...props} />,
+                            h2: ({ node, ...props }) => <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-2 leading-snug" {...props} />,
+                            h3: ({ node, ...props }) => <h3 className="text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white leading-snug" {...props} />,
+                            p: ({ node, ...props }) => <p className="mb-4 leading-relaxed text-gray-600 dark:text-gray-300" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-4 space-y-1.5 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
+                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-4 space-y-1.5 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
+                            li: ({ node, ...props }) => <li className="leading-relaxed pl-1" {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-extrabold text-indigo-900 dark:text-indigo-300 bg-indigo-50/50 dark:bg-indigo-900/20 px-1 rounded" {...props} />,
+                            code: ({ node, inline, className, children, ...props }: any) => {
+                              const match = /language-(\w+)/.exec(className || '');
+                              return !inline ? (
+                                <div className="my-4 rounded-xl overflow-hidden bg-[#0d1117] shadow-lg border border-gray-800">
+                                  <div className="px-4 py-2 bg-[#161b22] border-b border-gray-800 text-xs font-mono text-gray-400 flex items-center gap-2">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                                    <span className="ml-2 uppercase tracking-wider">{match ? match[1] : 'Code'}</span>
+                                  </div>
+                                  <pre className="p-5 overflow-x-auto text-sm text-gray-100 font-mono leading-relaxed">
+                                    <code className={className} {...props}>{children}</code>
+                                  </pre>
                                 </div>
-                                <pre className="p-5 overflow-x-auto text-sm text-gray-100 font-mono leading-relaxed">
-                                  <code className={className} {...props}>{children}</code>
-                                </pre>
-                              </div>
-                            ) : (
-                              <code className="bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md text-sm font-mono border border-gray-200 dark:border-gray-700" {...props}>
-                                {children}
-                              </code>
-                            );
-                          }
-                        }}
-                      >
-                        {contentSections[activeSectionIndex]?.content || ''}
-                      </ReactMarkdown>
-                    </div>
-
-                    {/* Pagination Footer */}
-                    <div className="mt-16 pt-8 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-                      {activeSectionIndex > 0 ? (
-                        <button
-                          onClick={() => {
-                            setActiveSectionIndex(activeSectionIndex - 1);
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                              ) : (
+                                <code className="bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md text-sm font-mono border border-gray-200 dark:border-gray-700" {...props}>
+                                  {children}
+                                </code>
+                              );
+                            }
                           }}
-                          className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all w-full sm:w-auto justify-center group"
                         >
-                          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
-                          Previous Section
-                        </button>
-                      ) : (
-                        <div></div> /* Placeholder for layout balance */
-                      )}
+                          {contentSections[activeSectionIndex]?.content || ''}
+                        </ReactMarkdown>
+                      </div>
 
-                      {activeSectionIndex < contentSections.length - 1 && (
-                        <button
-                          onClick={() => {
-                            setActiveSectionIndex(activeSectionIndex + 1);
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all w-full sm:w-auto justify-center ml-auto group"
-                        >
-                          Next Section 
-                          <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      )}
+                      {/* Pagination Footer */}
+                      <div className="mt-16 pt-8 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        {activeSectionIndex > 0 ? (
+                          <button
+                            onClick={() => {
+                              setActiveSectionIndex(activeSectionIndex - 1);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all w-full sm:w-auto justify-center group"
+                          >
+                            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
+                            Previous Section
+                          </button>
+                        ) : (
+                          <div></div> /* Placeholder for layout balance */
+                        )}
+
+                        {activeSectionIndex < contentSections.length - 1 && (
+                          <button
+                            onClick={() => {
+                              setActiveSectionIndex(activeSectionIndex + 1);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all w-full sm:w-auto justify-center ml-auto group"
+                          >
+                            Next Section 
+                            <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+                          </button>
+                        )}
+                      </div>
+
                     </div>
-
                   </div>
                 </div>
               </>
             ) : (
               /* Fallback gracefully to old summary_text if content_sections is missing */
-              <div className="prose prose-lg prose-indigo max-w-none w-full dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
-                <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                  <BookOpen className="w-6 h-6 text-indigo-600" /> Lesson Content
-                </h2>
-                <div className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{summary}</div>
+              <div className="w-full">
+                <div className="prose prose-lg prose-indigo max-w-none w-full dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
+                  <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                    <BookOpen className="w-6 h-6 text-indigo-600" /> Lesson Content
+                  </h2>
+                  <div className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{summary}</div>
+                </div>
               </div>
             )}
           </div>
@@ -427,7 +427,7 @@ const LessonView = () => {
 
         {/* ===================== QUIZ TAB ===================== */}
         {activeTab === 'quiz' && quiz.length > 0 && (
-          <div>
+          <div className="max-w-5xl mx-auto w-full">
             {quizMode === 'history' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-8">
