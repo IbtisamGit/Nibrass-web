@@ -188,85 +188,187 @@ const LessonView = () => {
   const summary = lesson.summary_text || 'No summary available.';
   const flashcards = lesson.flashcards || [];
   const quiz = lesson.mcq_questions || [];
-  // الأقسام الجديدة للدرس
   const contentSections = lesson.content_sections || [];
 
   return (
-    <div className="max-w-4xl mx-auto pb-12">
+    <div className="max-w-5xl mx-auto pb-12">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate('/dashboard/lessons')} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900">{lesson.topic || 'Untitled Topic'}</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">{lesson.topic || 'Untitled Topic'}</h1>
             <p className="text-sm text-gray-500 font-medium mt-1">Category: {lesson.category || 'General'}</p>
           </div>
         </div>
       </div>
 
-      <div className="flex bg-white rounded-2xl p-1.5 shadow-sm border border-gray-100 mb-8 overflow-x-auto whitespace-nowrap">
-        <button onClick={() => setActiveTab('content')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'content' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+      <div className="flex bg-white dark:bg-gray-800 rounded-2xl p-1.5 shadow-sm border border-gray-100 dark:border-gray-700 mb-8 overflow-x-auto whitespace-nowrap">
+        <button onClick={() => setActiveTab('content')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'content' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
           <BookOpen className="w-4 h-4" /> Lesson Content
         </button>
-        <button onClick={() => setActiveTab('flashcards')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'flashcards' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+        <button onClick={() => setActiveTab('flashcards')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'flashcards' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
           <Layers className="w-4 h-4" /> Flashcards ({flashcards.length})
         </button>
-        <button onClick={() => setActiveTab('quiz')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'quiz' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+        <button onClick={() => setActiveTab('quiz')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'quiz' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
           <CheckSquare className="w-4 h-4" /> Quiz ({quiz.length})
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 h-auto min-h-[400px]">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 md:p-8 h-auto min-h-[500px]">
         
-        {/* ===================== CONTENT TAB (NEW TWO-COLUMN LAYOUT) ===================== */}
+        {/* ===================== CONTENT TAB (PREMIUM LAYOUT) ===================== */}
         {activeTab === 'content' && (
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-8 lg:gap-16 relative">
+            <style>{`
+              @keyframes fadeInSlideUp {
+                from { opacity: 0; transform: translateY(8px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+              .animate-fade-in-up {
+                animation: fadeInSlideUp 0.5s ease-out forwards;
+              }
+            `}</style>
+            
             {contentSections && contentSections.length > 0 ? (
               <>
-                {/* Left Sidebar (Table of Contents) */}
+                {/* Left Sidebar (Journey Stepper) */}
                 <div className="w-full md:w-1/3 lg:w-1/4 shrink-0">
-                  <div className="sticky top-24">
-                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-                      <BookOpen className="w-4 h-4" /> Table of Contents
+                  <div className="sticky top-28">
+                    <h3 className="text-xs font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4" /> Learning Path
                     </h3>
-                    <div className="flex flex-col gap-2">
-                      {contentSections.map((section: any, index: number) => (
-                        <button
-                          key={index}
-                          onClick={() => setActiveSectionIndex(index)}
-                          className={`text-left px-4 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
-                            activeSectionIndex === index
-                              ? 'bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600 shadow-sm'
-                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
-                          }`}
-                        >
-                          {section.section_title}
-                        </button>
-                      ))}
+                    <div className="flex flex-col relative">
+                      {/* Vertical line connecting steps */}
+                      <div className="absolute left-[15px] top-6 bottom-6 w-px bg-gray-200 dark:bg-gray-700 -z-10"></div>
+                      
+                      {contentSections.map((section: any, index: number) => {
+                        const isActive = activeSectionIndex === index;
+                        const stepNumber = String(index + 1).padStart(2, '0');
+                        
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => setActiveSectionIndex(index)}
+                            className={`group flex items-start gap-4 p-3 -ml-3 rounded-2xl transition-all duration-300 text-left ${
+                              isActive 
+                                ? 'bg-indigo-50/80 dark:bg-indigo-900/20' 
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                            }`}
+                          >
+                            <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold transition-all duration-300 ${
+                              isActive 
+                                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200 dark:shadow-none scale-110' 
+                                : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                            }`}>
+                              {stepNumber}
+                            </span>
+                            <span className={`pt-1.5 text-sm font-bold line-clamp-2 leading-snug transition-colors duration-300 ${
+                              isActive 
+                                ? 'text-indigo-900 dark:text-indigo-300' 
+                                : 'text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200'
+                            }`}>
+                              {section.section_title}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
 
-                {/* Right Area (Markdown Content) */}
-                <div className="flex-1 w-full min-w-0 bg-gray-50/50 rounded-2xl p-6 md:p-8 border border-gray-100">
-                  <h2 className="text-2xl font-extrabold text-gray-900 mb-6 pb-4 border-b border-gray-200">
-                    {contentSections[activeSectionIndex]?.section_title}
-                  </h2>
-                  <div className="prose prose-indigo max-w-none text-gray-700 leading-relaxed">
-                    <ReactMarkdown>
-                      {contentSections[activeSectionIndex]?.content || ''}
-                    </ReactMarkdown>
+                {/* Right Area (Premium Prose) */}
+                <div className="flex-1 w-full min-w-0 max-w-3xl">
+                  <div key={activeSectionIndex} className="animate-fade-in-up">
+                    <div className="mb-8 pt-2">
+                      <span className="inline-block px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold uppercase tracking-widest rounded-full mb-4">
+                        Section {activeSectionIndex + 1} of {contentSections.length}
+                      </span>
+                      <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white leading-tight py-1">
+                        {contentSections[activeSectionIndex]?.section_title}
+                      </h2>
+                    </div>
+                    
+                    {/* تم تطبيق الكلاسات النظيفة المخصصة للمقالات وأكواد البرمجة كما طلبت بالضبط */}
+                    <div className="prose prose-lg prose-indigo max-w-none dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
+                      <ReactMarkdown
+                        components={{
+                          h1: ({ node, ...props }) => <h1 className="text-3xl font-extrabold mt-8 mb-4 text-gray-900 dark:text-white leading-tight" {...props} />,
+                          h2: ({ node, ...props }) => <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-2 leading-snug" {...props} />,
+                          h3: ({ node, ...props }) => <h3 className="text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white leading-snug" {...props} />,
+                          p: ({ node, ...props }) => <p className="mb-5 text-gray-600 dark:text-gray-300 leading-[1.8]" {...props} />,
+                          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-6 space-y-2 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
+                          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-6 space-y-2 text-gray-600 dark:text-gray-300 marker:text-indigo-500" {...props} />,
+                          li: ({ node, ...props }) => <li className="leading-[1.8] pl-1" {...props} />,
+                          strong: ({ node, ...props }) => <strong className="font-extrabold text-indigo-900 dark:text-indigo-300 bg-indigo-50/50 dark:bg-indigo-900/20 px-1 rounded" {...props} />,
+                          code: ({ node, inline, className, children, ...props }: any) => {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return !inline ? (
+                              <div className="my-6 rounded-xl overflow-hidden bg-[#0d1117] shadow-lg border border-gray-800">
+                                <div className="px-4 py-2 bg-[#161b22] border-b border-gray-800 text-xs font-mono text-gray-400 flex items-center gap-2">
+                                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                                  <span className="ml-2 uppercase tracking-wider">{match ? match[1] : 'Code'}</span>
+                                </div>
+                                <pre className="p-5 overflow-x-auto text-sm text-gray-100 font-mono leading-relaxed">
+                                  <code className={className} {...props}>{children}</code>
+                                </pre>
+                              </div>
+                            ) : (
+                              <code className="bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md text-sm font-mono border border-gray-200 dark:border-gray-700" {...props}>
+                                {children}
+                              </code>
+                            );
+                          }
+                        }}
+                      >
+                        {contentSections[activeSectionIndex]?.content || ''}
+                      </ReactMarkdown>
+                    </div>
+
+                    {/* Pagination Footer */}
+                    <div className="mt-16 pt-8 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      {activeSectionIndex > 0 ? (
+                        <button
+                          onClick={() => {
+                            setActiveSectionIndex(activeSectionIndex - 1);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all w-full sm:w-auto justify-center group"
+                        >
+                          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> 
+                          Previous Section
+                        </button>
+                      ) : (
+                        <div></div> /* Placeholder for layout balance */
+                      )}
+
+                      {activeSectionIndex < contentSections.length - 1 && (
+                        <button
+                          onClick={() => {
+                            setActiveSectionIndex(activeSectionIndex + 1);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="flex items-center gap-2 px-6 py-3 text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all w-full sm:w-auto justify-center ml-auto group"
+                        >
+                          Next Section 
+                          <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      )}
+                    </div>
+
                   </div>
                 </div>
               </>
             ) : (
               /* Fallback gracefully to old summary_text if content_sections is missing */
-              <div className="prose prose-indigo max-w-none w-full">
-                <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-indigo-600" /> Lesson Content
+              <div className="prose prose-lg prose-indigo max-w-none w-full dark:prose-invert prose-p:leading-relaxed prose-headings:font-extrabold prose-a:text-indigo-600 prose-code:text-indigo-600 dark:prose-code:text-indigo-400 prose-pre:bg-slate-900 prose-pre:shadow-sm rounded-xl">
+                <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                  <BookOpen className="w-6 h-6 text-indigo-600" /> Lesson Content
                 </h2>
-                <div className="text-gray-600 leading-relaxed whitespace-pre-wrap">{summary}</div>
+                <div className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{summary}</div>
               </div>
             )}
           </div>
@@ -277,16 +379,16 @@ const LessonView = () => {
           <div className="flex flex-col items-center">
             <div className="w-full max-w-lg mb-6">
               <div className="flex justify-between items-end mb-2">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-indigo-600" /> Study Flashcards
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-indigo-600 dark:text-indigo-400" /> Study Flashcards
                 </h2>
-                <span className="text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">
                   {currentCard + 1} / {flashcards.length}
                 </span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2.5">
+              <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2.5">
                 <div 
-                  className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out" 
+                  className="bg-indigo-600 dark:bg-indigo-500 h-2.5 rounded-full transition-all duration-300 ease-out" 
                   style={{ width: `${((currentCard + 1) / flashcards.length) * 100}%` }}
                 ></div>
               </div>
@@ -294,9 +396,9 @@ const LessonView = () => {
 
             <div className="w-full max-w-lg h-72 perspective-1000 cursor-pointer group" onClick={() => setIsFlipped(!isFlipped)}>
               <div className={`relative w-full h-full transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-                <div className="absolute w-full h-full backface-hidden bg-white border-2 border-indigo-50 group-hover:border-indigo-100 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-colors">
-                  <span className="absolute top-5 right-6 text-xs font-bold text-indigo-300 tracking-wider">FRONT</span>
-                  <p className="text-2xl font-semibold text-gray-800 leading-snug">{flashcards[currentCard].front_text}</p>
+                <div className="absolute w-full h-full backface-hidden bg-white dark:bg-gray-800 border-2 border-indigo-50 dark:border-gray-700 group-hover:border-indigo-100 dark:group-hover:border-indigo-500/50 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-colors">
+                  <span className="absolute top-5 right-6 text-xs font-bold text-indigo-300 dark:text-indigo-500 tracking-wider">FRONT</span>
+                  <p className="text-2xl font-semibold text-gray-800 dark:text-white leading-snug">{flashcards[currentCard].front_text}</p>
                   <p className="text-sm text-gray-400 mt-6 flex items-center gap-1 opacity-70"><RotateCcw className="w-4 h-4"/> Click to flip</p>
                 </div>
                 <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-lg rotate-y-180">
@@ -308,16 +410,16 @@ const LessonView = () => {
 
             <div className="flex flex-col items-center mt-8">
               <div className="flex items-center gap-4">
-                <button onClick={() => { setIsFlipped(false); setTimeout(() => setCurrentCard((prev) => Math.max(0, prev - 1)), 150); }} disabled={currentCard === 0} className="px-6 py-3 text-sm font-bold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 disabled:opacity-40 transition-colors">
+                <button onClick={() => { setIsFlipped(false); setTimeout(() => setCurrentCard((prev) => Math.max(0, prev - 1)), 150); }} disabled={currentCard === 0} className="px-6 py-3 text-sm font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-40 transition-colors">
                   Previous
                 </button>
                 <button onClick={() => { setIsFlipped(false); setTimeout(() => setCurrentCard((prev) => Math.min(flashcards.length - 1, prev + 1)), 150); }} disabled={currentCard === flashcards.length - 1} className="px-6 py-3 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 disabled:opacity-40 shadow-sm transition-colors">
                   Next Card
                 </button>
               </div>
-              <div className="mt-4 flex items-center gap-2 text-xs text-gray-400">
+              <div className="mt-4 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
                 <Keyboard className="w-4 h-4" />
-                <span>Use <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded-md text-gray-500 font-mono text-[10px]">Space</kbd> to flip, and <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded-md text-gray-500 font-mono text-[10px]">Arrows</kbd> to navigate</span>
+                <span>Use <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md text-gray-500 dark:text-gray-400 font-mono text-[10px]">Space</kbd> to flip, and <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md text-gray-500 dark:text-gray-400 font-mono text-[10px]">Arrows</kbd> to navigate</span>
               </div>
             </div>
           </div>
@@ -329,8 +431,8 @@ const LessonView = () => {
             {quizMode === 'history' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-indigo-600" /> Quiz History
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" /> Quiz History
                   </h2>
                   <button onClick={handleStartNewQuiz} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm flex items-center gap-2">
                     <PlayCircle className="w-4 h-4" /> Take New Quiz
@@ -339,22 +441,22 @@ const LessonView = () => {
                 
                 <div className="grid gap-4">
                   {quizHistory.map((attempt, index) => (
-                    <div key={attempt.id} className="bg-gray-50 border border-gray-100 rounded-2xl p-5 flex items-center justify-between hover:border-indigo-100 hover:bg-indigo-50/30 transition-all">
+                    <div key={attempt.id} className="bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 flex items-center justify-between hover:border-indigo-100 dark:hover:border-indigo-500/30 transition-all">
                       <div>
-                        <p className="font-bold text-gray-900">Attempt {quizHistory.length - index}</p>
-                        <p className="text-xs text-gray-500 mt-1">{new Date(attempt.completed_at).toLocaleString()}</p>
+                        <p className="font-bold text-gray-900 dark:text-white">Attempt {quizHistory.length - index}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{new Date(attempt.completed_at).toLocaleString()}</p>
                       </div>
                       <div className="flex items-center gap-6">
                         <div className="text-right">
-                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Score</p>
-                          <p className={`text-lg font-bold ${attempt.score >= 80 ? 'text-green-600' : attempt.score >= 50 ? 'text-orange-500' : 'text-red-500'}`}>
+                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Score</p>
+                          <p className={`text-lg font-bold ${attempt.score >= 80 ? 'text-green-600 dark:text-green-400' : attempt.score >= 50 ? 'text-orange-500 dark:text-orange-400' : 'text-red-500 dark:text-red-400'}`}>
                             {attempt.score}%
                           </p>
                         </div>
                         <button 
                           onClick={() => handleReviewAttempt(attempt)}
                           disabled={!attempt.user_answers}
-                          className="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                          className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                         >
                           Review
                         </button>
@@ -372,19 +474,19 @@ const LessonView = () => {
                     {quizHistory.length > 0 && (
                       <button 
                         onClick={() => setQuizMode('history')} 
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-indigo-200 hover:text-indigo-600 transition-all shadow-sm"
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm"
                       >
                         <ArrowLeft className="w-4 h-4" /> Back to History
                       </button>
                     )}
-                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2 ml-2">
-                      <CheckSquare className="w-5 h-5 text-indigo-600" />
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2 ml-2">
+                      <CheckSquare className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                       {quizMode === 'reviewing' ? 'Reviewing Attempt' : 'Knowledge Check'}
                     </h2>
                   </div>
 
                   {quizMode === 'reviewing' && (
-                    <span className="bg-indigo-100 text-indigo-800 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
+                    <span className="bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
                       Score: {selectedAttempt.score}%
                     </span>
                   )}
@@ -397,8 +499,8 @@ const LessonView = () => {
                         : selectedAnswers[index];
 
                     return (
-                      <div key={index} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-                        <p className="font-semibold text-gray-800 mb-4">{index + 1}. {q.question_text}</p>
+                      <div key={index} className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                        <p className="font-semibold text-gray-800 dark:text-white mb-4">{index + 1}. {q.question_text}</p>
                         <div className="space-y-2">
                           {(q.options || []).map((opt: string, optIndex: number) => {
                             const isSelected = chosenAnswerIndex === optIndex;
@@ -407,15 +509,15 @@ const LessonView = () => {
                             let btnClass = "w-full text-left px-4 py-3 rounded-xl border transition-all text-sm font-medium ";
                             
                             if (quizMode === 'taking') {
-                              btnClass += isSelected ? "bg-indigo-50 border-indigo-600 text-indigo-700 shadow-sm" : "bg-white border-gray-200 text-gray-600 hover:border-indigo-300";
+                              btnClass += isSelected ? "bg-indigo-50 dark:bg-indigo-900/30 border-indigo-600 dark:border-indigo-500 text-indigo-700 dark:text-indigo-400 shadow-sm" : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-indigo-300 dark:hover:border-indigo-500/50";
                             } 
                             else if (quizMode === 'reviewing') {
                               if (isCorrect) {
-                                btnClass += "bg-green-50 border-green-500 text-green-700";
+                                btnClass += "bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-600 text-green-700 dark:text-green-400";
                               } else if (isSelected && !isCorrect) {
-                                btnClass += "bg-red-50 border-red-500 text-red-700";
+                                btnClass += "bg-red-50 dark:bg-red-900/20 border-red-500 dark:border-red-600 text-red-700 dark:text-red-400";
                               } else {
-                                btnClass += "bg-white border-gray-200 text-gray-400 opacity-50";
+                                btnClass += "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 opacity-50";
                               }
                             }
 
@@ -453,8 +555,8 @@ const LessonView = () => {
         )}
 
         {/* Empty States */}
-        {activeTab === 'flashcards' && flashcards.length === 0 && <p className="text-gray-500 text-center py-12">No flashcards generated for this lesson.</p>}
-        {activeTab === 'quiz' && quiz.length === 0 && <p className="text-gray-500 text-center py-12">No quiz generated for this lesson.</p>}
+        {activeTab === 'flashcards' && flashcards.length === 0 && <p className="text-gray-500 dark:text-gray-400 text-center py-12">No flashcards generated for this lesson.</p>}
+        {activeTab === 'quiz' && quiz.length === 0 && <p className="text-gray-500 dark:text-gray-400 text-center py-12">No quiz generated for this lesson.</p>}
 
       </div>
     </div>
