@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { ArrowLeft, BookOpen, Layers, CheckSquare, Loader2, AlertCircle, RotateCcw, Clock, PlayCircle, ChevronLeft, Keyboard } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 const LessonView = () => {
   const { id } = useParams();
@@ -10,7 +11,11 @@ const LessonView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const [activeTab, setActiveTab] = useState('summary');
+  // غيرنا الافتراضي من summary إلى content
+  const [activeTab, setActiveTab] = useState('content');
+  
+  // حالة القسم الفعال في محتوى الدرس (Table of Contents)
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   
   // حالة البطاقات التعليمية
   const [currentCard, setCurrentCard] = useState(0);
@@ -183,6 +188,8 @@ const LessonView = () => {
   const summary = lesson.summary_text || 'No summary available.';
   const flashcards = lesson.flashcards || [];
   const quiz = lesson.mcq_questions || [];
+  // الأقسام الجديدة للدرس
+  const contentSections = lesson.content_sections || [];
 
   return (
     <div className="max-w-4xl mx-auto pb-12">
@@ -198,27 +205,70 @@ const LessonView = () => {
         </div>
       </div>
 
-      <div className="flex bg-white rounded-2xl p-1.5 shadow-sm border border-gray-100 mb-8">
-        <button onClick={() => setActiveTab('summary')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${activeTab === 'summary' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
-          <BookOpen className="w-4 h-4" /> Summary
+      <div className="flex bg-white rounded-2xl p-1.5 shadow-sm border border-gray-100 mb-8 overflow-x-auto whitespace-nowrap">
+        <button onClick={() => setActiveTab('content')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'content' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+          <BookOpen className="w-4 h-4" /> Lesson Content
         </button>
-        <button onClick={() => setActiveTab('flashcards')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${activeTab === 'flashcards' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+        <button onClick={() => setActiveTab('flashcards')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'flashcards' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
           <Layers className="w-4 h-4" /> Flashcards ({flashcards.length})
         </button>
-        <button onClick={() => setActiveTab('quiz')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${activeTab === 'quiz' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
+        <button onClick={() => setActiveTab('quiz')} className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all min-w-[150px] ${activeTab === 'quiz' ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}>
           <CheckSquare className="w-4 h-4" /> Quiz ({quiz.length})
         </button>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 h-auto min-h-[400px]">
         
-        {/* ===================== SUMMARY TAB ===================== */}
-        {activeTab === 'summary' && (
-          <div className="prose prose-indigo max-w-none">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-indigo-600" /> Lesson Summary
-            </h2>
-            <div className="text-gray-600 leading-relaxed whitespace-pre-wrap">{summary}</div>
+        {/* ===================== CONTENT TAB (NEW TWO-COLUMN LAYOUT) ===================== */}
+        {activeTab === 'content' && (
+          <div className="flex flex-col md:flex-row gap-8">
+            {contentSections && contentSections.length > 0 ? (
+              <>
+                {/* Left Sidebar (Table of Contents) */}
+                <div className="w-full md:w-1/3 lg:w-1/4 shrink-0">
+                  <div className="sticky top-24">
+                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4" /> Table of Contents
+                    </h3>
+                    <div className="flex flex-col gap-2">
+                      {contentSections.map((section: any, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => setActiveSectionIndex(index)}
+                          className={`text-left px-4 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
+                            activeSectionIndex === index
+                              ? 'bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600 shadow-sm'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
+                          }`}
+                        >
+                          {section.section_title}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Area (Markdown Content) */}
+                <div className="flex-1 w-full min-w-0 bg-gray-50/50 rounded-2xl p-6 md:p-8 border border-gray-100">
+                  <h2 className="text-2xl font-extrabold text-gray-900 mb-6 pb-4 border-b border-gray-200">
+                    {contentSections[activeSectionIndex]?.section_title}
+                  </h2>
+                  <div className="prose prose-indigo max-w-none text-gray-700 leading-relaxed">
+                    <ReactMarkdown>
+                      {contentSections[activeSectionIndex]?.content || ''}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* Fallback gracefully to old summary_text if content_sections is missing */
+              <div className="prose prose-indigo max-w-none w-full">
+                <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-indigo-600" /> Lesson Content
+                </h2>
+                <div className="text-gray-600 leading-relaxed whitespace-pre-wrap">{summary}</div>
+              </div>
+            )}
           </div>
         )}
 
@@ -234,7 +284,6 @@ const LessonView = () => {
                   {currentCard + 1} / {flashcards.length}
                 </span>
               </div>
-              {/* شريط التقدم الجديد */}
               <div className="w-full bg-gray-100 rounded-full h-2.5">
                 <div 
                   className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out" 
@@ -266,7 +315,6 @@ const LessonView = () => {
                   Next Card
                 </button>
               </div>
-              {/* تلميحة الكيبورد */}
               <div className="mt-4 flex items-center gap-2 text-xs text-gray-400">
                 <Keyboard className="w-4 h-4" />
                 <span>Use <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded-md text-gray-500 font-mono text-[10px]">Space</kbd> to flip, and <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded-md text-gray-500 font-mono text-[10px]">Arrows</kbd> to navigate</span>
