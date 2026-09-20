@@ -27,14 +27,13 @@ const CATEGORIES = [
   { id: 'quantum-computing', title: 'Quantum Computing', desc: 'Qubits, quantum algorithms, and cryptography.', icon: Atom, color: 'text-fuchsia-600 dark:text-fuchsia-400', bgColor: 'bg-fuchsia-50 dark:bg-fuchsia-900/30', topics: ['Quantum Superposition', 'Shor\'s Algorithm', 'Quantum Cryptography'] }
 ];
 
-// تصنيف مخصص للدروس الحرة
 const CUSTOM_CATEGORY = {
   id: 'custom',
   title: 'Custom Topic',
   icon: Sparkles,
   color: 'text-indigo-600 dark:text-indigo-400',
   bgColor: 'bg-indigo-100 dark:bg-indigo-900/30',
-  topics: [] // بدون دروس مقترحة
+  topics: [] 
 };
 
 const Homepage = () => {
@@ -80,19 +79,55 @@ const Homepage = () => {
   return (
     <div className="w-full pb-12 font-sans animate-in fade-in duration-500">
       
-      {/* Hero Section */}
-      <div className="text-center mb-12 mt-4">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
+      {/* Transformed Hero Section */}
+      <div className="text-center mb-16 mt-8">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-5 tracking-tight text-gray-900 dark:text-white">
           What do you want to <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">master</span> today?
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          Select a field below to explore curated topics or let our AI generate a personalized, interactive lesson tailored to your skill level.
+        <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+          Generate a personalized, interactive lesson on absolutely any topic, or explore our curated fields below.
         </p>
+
+        {/* Smart Command Bar (Custom Lesson Trigger) */}
+        <div 
+          onClick={() => setSelectedCategory(CUSTOM_CATEGORY)}
+          className="relative max-w-2xl mx-auto group cursor-text px-4 sm:px-0"
+        >
+          {/* Soft Glow */}
+          <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div>
+          
+          <div className="relative flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-[0_0_40px_-15px_rgba(79,70,229,0.3)] rounded-full p-2 pl-6 transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:shadow-[0_0_40px_-10px_rgba(79,70,229,0.4)] hover:-translate-y-0.5">
+            <Sparkles className="w-6 h-6 text-indigo-500 dark:text-indigo-400 shrink-0" />
+            
+            <div className="flex-1 text-left px-4 overflow-hidden">
+              <span className="text-gray-400 dark:text-gray-500 font-medium text-sm sm:text-base truncate block">
+                Type any topic (e.g., React Hooks, Black Holes)...
+              </span>
+            </div>
+            
+            <button className="shrink-0 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-indigo-600 dark:hover:bg-indigo-500 font-bold py-3.5 px-5 sm:px-7 rounded-full shadow-md transition-all duration-300 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-indigo-400 dark:text-indigo-600 group-hover:text-white transition-colors" />
+              <span className="hidden sm:inline">Generate Lesson</span>
+              <span className="sm:hidden">Generate</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Categories Grid */}
+      {/* Smooth Transition (Divider) */}
+      <div className="relative max-w-4xl mx-auto mb-12 mt-16 px-4">
+        <div className="absolute inset-0 flex items-center px-4" aria-hidden="true">
+          <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+        </div>
+        <div className="relative flex justify-center">
+          <span className="px-4 text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest bg-gray-50 dark:bg-gray-900">
+            Or explore curated fields
+          </span>
+        </div>
+      </div>
+
       {/* Categories Grid - Ultra Premium Redesign */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
         {CATEGORIES.map((cat, idx) => (
           <button
             key={cat.id}
@@ -125,38 +160,6 @@ const Homepage = () => {
             </div>
           </button>
         ))}
-      </div>
-
-      {/* Custom Topic CTA Section */}
-       {/* Custom Topic CTA Section - Sleek Horizontal Banner */}
-            {/* Modern Centered CTA Section */}
-      <div className="mt-24 mb-10 flex flex-col items-center justify-center text-center px-4">
-        
-        {/* Glowing Icon Wrapper */}
-        <div className="relative mb-6 group cursor-pointer" onClick={() => setSelectedCategory(CUSTOM_CATEGORY)}>
-          <div className="absolute inset-0 bg-indigo-500 blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full"></div>
-          <div className="relative w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-100 dark:border-gray-700 shadow-sm group-hover:-translate-y-1 transition-transform duration-300">
-             <Sparkles className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-          </div>
-        </div>
-
-        <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
-          Have a specific topic in mind?
-        </h3>
-        
-        <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8 text-sm md:text-base leading-relaxed">
-          Nibras AI can teach you absolutely anything. Enter any subject, tool, or framework and get a personalized lesson instantly.
-        </p>
-        
-        {/* Modern Pill Button */}
-        <button 
-          onClick={() => setSelectedCategory(CUSTOM_CATEGORY)}
-          className="group flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-indigo-600 dark:hover:bg-indigo-500 font-bold py-3.5 px-8 rounded-full shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 hover:-translate-y-0.5"
-        >
-          <Sparkles className="w-4 h-4 text-indigo-400 dark:text-indigo-600 group-hover:text-white transition-colors" />
-          <span>Create Custom Lesson</span>
-        </button>
-        
       </div>
 
       {/* Exploration Modal */}
@@ -207,7 +210,7 @@ const Homepage = () => {
                 </div>
               </div>
 
-              {/* Curated Topics - تظهر فقط إذا كان هناك مواضيع مقترحة */}
+              {/* Curated Topics */}
               {selectedCategory.topics && selectedCategory.topics.length > 0 && (
                 <div className="mb-10">
                   <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
