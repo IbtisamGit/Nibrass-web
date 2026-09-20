@@ -8,25 +8,34 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-// الألوان تم ضبطها لتعمل بامتياز في الفاتح والداكن
 const CATEGORIES = [
-  { id: 'cybersecurity', title: 'Cybersecurity', icon: Shield, color: 'text-red-600 dark:text-red-400', bgColor: 'bg-red-100 dark:bg-red-900/30', topics: ['Anatomy of Ransomware', 'SQL Injection Mechanics', 'Zero-Day Vulnerabilities'] },
-  { id: 'software-eng', title: 'Software Engineering', icon: Code, color: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-100 dark:bg-blue-900/30', topics: ['SOLID Principles Explained', 'Microservices vs Monoliths', 'Test-Driven Development (TDD)'] },
-  { id: 'ai-ml', title: 'AI & ML', icon: BrainCircuit, color: 'text-purple-600 dark:text-purple-400', bgColor: 'bg-purple-100 dark:bg-purple-900/30', topics: ['Neural Networks from Scratch', 'Natural Language Processing (NLP)', 'Reinforcement Learning Basics'] },
-  { id: 'data-science', title: 'Data Science', icon: BarChart3, color: 'text-emerald-600 dark:text-emerald-400', bgColor: 'bg-emerald-100 dark:bg-emerald-900/30', topics: ['Exploratory Data Analysis', 'A/B Testing Methodologies', 'Time Series Forecasting'] },
-  { id: 'cloud-devops', title: 'Cloud & DevOps', icon: Cloud, color: 'text-cyan-600 dark:text-cyan-400', bgColor: 'bg-cyan-100 dark:bg-cyan-900/30', topics: ['CI/CD Pipelines with GitHub Actions', 'Docker Containerization', 'Kubernetes Orchestration'] },
-  { id: 'database-systems', title: 'Database Systems', icon: Database, color: 'text-orange-600 dark:text-orange-400', bgColor: 'bg-orange-100 dark:bg-orange-900/30', topics: ['ACID Properties in RDBMS', 'NoSQL vs Relational Databases', 'Database Indexing Strategies'] },
-  { id: 'info-systems', title: 'Information Systems', icon: Server, color: 'text-indigo-600 dark:text-indigo-400', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', topics: ['Enterprise Resource Planning (ERP)', 'Management Information Systems', 'Business Intelligence Tools'] },
-  { id: 'networks', title: 'Networks', icon: Wifi, color: 'text-sky-600 dark:text-sky-400', bgColor: 'bg-sky-100 dark:bg-sky-900/30', topics: ['OSI Model Demystified', 'TCP/IP Protocols', 'Subnetting and IP Addressing'] },
-  { id: 'ui-ux', title: 'UI/UX Design', icon: Palette, color: 'text-pink-600 dark:text-pink-400', bgColor: 'bg-pink-100 dark:bg-pink-900/30', topics: ['Wireframing and Prototyping', 'User-Centered Design', 'Color Theory and Typography'] },
-  { id: 'mobile-dev', title: 'Mobile Development', icon: Smartphone, color: 'text-teal-600 dark:text-teal-400', bgColor: 'bg-teal-100 dark:bg-teal-900/30', topics: ['React Native Fundamentals', 'iOS App Architecture', 'State Management in Flutter'] },
-  { id: 'iot', title: 'Internet of Things', icon: Cpu, color: 'text-lime-600 dark:text-lime-400', bgColor: 'bg-lime-100 dark:bg-lime-900/30', topics: ['MQTT Protocol Basics', 'Edge Computing', 'Sensor Data Processing'] },
-  { id: 'blockchain', title: 'Blockchain', icon: Link, color: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-100 dark:bg-amber-900/30', topics: ['Smart Contracts with Solidity', 'Consensus Mechanisms', 'Decentralized Finance (DeFi)'] },
-  { id: 'game-dev', title: 'Game Development', icon: Gamepad2, color: 'text-violet-600 dark:text-violet-400', bgColor: 'bg-violet-100 dark:bg-violet-900/30', topics: ['Unity Physics Engine', 'Game Loop Architecture', 'Shader Graph Basics'] },
-  { id: 'operating-systems', title: 'Operating Systems', icon: Terminal, color: 'text-slate-600 dark:text-slate-400', bgColor: 'bg-slate-200 dark:bg-slate-800', topics: ['CPU Scheduling Algorithms', 'Virtual Memory Management', 'Concurrency and Deadlocks'] },
-  { id: 'it-project-management', title: 'IT Project Mgmt', icon: Briefcase, color: 'text-yellow-600 dark:text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', topics: ['Agile Scrum Methodology', 'Kanban Boards in Practice', 'Risk Management Strategies'] },
-  { id: 'quantum-computing', title: 'Quantum Computing', icon: Atom, color: 'text-fuchsia-600 dark:text-fuchsia-400', bgColor: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', topics: ['Quantum Superposition', 'Shor\'s Algorithm', 'Quantum Cryptography'] }
+  { id: 'cybersecurity', title: 'Cybersecurity', desc: 'Network defense, cryptography, and ethical hacking basics.', icon: Shield, color: 'text-red-600 dark:text-red-400', bgColor: 'bg-red-50 dark:bg-red-900/30', topics: ['Anatomy of Ransomware', 'SQL Injection Mechanics', 'Zero-Day Vulnerabilities'] },
+  { id: 'software-eng', title: 'Software Engineering', desc: 'Architecture, design patterns, and system scalability.', icon: Code, color: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-50 dark:bg-blue-900/30', topics: ['SOLID Principles Explained', 'Microservices vs Monoliths', 'Test-Driven Development (TDD)'] },
+  { id: 'ai-ml', title: 'AI & ML', desc: 'Neural networks, NLP, and deep learning algorithms.', icon: BrainCircuit, color: 'text-purple-600 dark:text-purple-400', bgColor: 'bg-purple-50 dark:bg-purple-900/30', topics: ['Neural Networks from Scratch', 'Natural Language Processing (NLP)', 'Reinforcement Learning Basics'] },
+  { id: 'data-science', title: 'Data Science', desc: 'Data analytics, statistics, and predictive modeling.', icon: BarChart3, color: 'text-emerald-600 dark:text-emerald-400', bgColor: 'bg-emerald-50 dark:bg-emerald-900/30', topics: ['Exploratory Data Analysis', 'A/B Testing Methodologies', 'Time Series Forecasting'] },
+  { id: 'cloud-devops', title: 'Cloud & DevOps', desc: 'CI/CD, containerization, and cloud infrastructure.', icon: Cloud, color: 'text-cyan-600 dark:text-cyan-400', bgColor: 'bg-cyan-50 dark:bg-cyan-900/30', topics: ['CI/CD Pipelines with GitHub Actions', 'Docker Containerization', 'Kubernetes Orchestration'] },
+  { id: 'database-systems', title: 'Database Systems', desc: 'SQL, NoSQL, and database performance tuning.', icon: Database, color: 'text-orange-600 dark:text-orange-400', bgColor: 'bg-orange-50 dark:bg-orange-900/30', topics: ['ACID Properties in RDBMS', 'NoSQL vs Relational Databases', 'Database Indexing Strategies'] },
+  { id: 'info-systems', title: 'Information Systems', desc: 'Enterprise systems, BI, and IT project management.', icon: Server, color: 'text-indigo-600 dark:text-indigo-400', bgColor: 'bg-indigo-50 dark:bg-indigo-900/30', topics: ['Enterprise Resource Planning (ERP)', 'Management Information Systems', 'Business Intelligence Tools'] },
+  { id: 'networks', title: 'Networks', desc: 'Routing, switching, and internet protocols (TCP/IP).', icon: Wifi, color: 'text-sky-600 dark:text-sky-400', bgColor: 'bg-sky-50 dark:bg-sky-900/30', topics: ['OSI Model Demystified', 'TCP/IP Protocols', 'Subnetting and IP Addressing'] },
+  { id: 'ui-ux', title: 'UI/UX Design', desc: 'User research, wireframing, and interactive prototyping.', icon: Palette, color: 'text-pink-600 dark:text-pink-400', bgColor: 'bg-pink-50 dark:bg-pink-900/30', topics: ['Wireframing and Prototyping', 'User-Centered Design', 'Color Theory and Typography'] },
+  { id: 'mobile-dev', title: 'Mobile Development', desc: 'iOS, Android, and cross-platform app development.', icon: Smartphone, color: 'text-teal-600 dark:text-teal-400', bgColor: 'bg-teal-50 dark:bg-teal-900/30', topics: ['React Native Fundamentals', 'iOS App Architecture', 'State Management in Flutter'] },
+  { id: 'iot', title: 'Internet of Things', desc: 'Sensors, edge computing, and smart connected devices.', icon: Cpu, color: 'text-lime-600 dark:text-lime-400', bgColor: 'bg-lime-50 dark:bg-lime-900/30', topics: ['MQTT Protocol Basics', 'Edge Computing', 'Sensor Data Processing'] },
+  { id: 'blockchain', title: 'Blockchain', desc: 'Smart contracts, Web3, and decentralized apps.', icon: Link, color: 'text-amber-600 dark:text-amber-400', bgColor: 'bg-amber-50 dark:bg-amber-900/30', topics: ['Smart Contracts with Solidity', 'Consensus Mechanisms', 'Decentralized Finance (DeFi)'] },
+  { id: 'game-dev', title: 'Game Development', desc: 'Game engines, graphics, and physics programming.', icon: Gamepad2, color: 'text-violet-600 dark:text-violet-400', bgColor: 'bg-violet-50 dark:bg-violet-900/30', topics: ['Unity Physics Engine', 'Game Loop Architecture', 'Shader Graph Basics'] },
+  { id: 'operating-systems', title: 'Operating Systems', desc: 'Memory management, concurrency, and kernels.', icon: Terminal, color: 'text-slate-600 dark:text-slate-400', bgColor: 'bg-slate-100 dark:bg-slate-800', topics: ['CPU Scheduling Algorithms', 'Virtual Memory Management', 'Concurrency and Deadlocks'] },
+  { id: 'it-project-management', title: 'IT Project Mgmt', desc: 'Agile methodologies, Scrum, and technical leadership.', icon: Briefcase, color: 'text-yellow-600 dark:text-yellow-500', bgColor: 'bg-yellow-50 dark:bg-yellow-900/30', topics: ['Agile Scrum Methodology', 'Kanban Boards in Practice', 'Risk Management Strategies'] },
+  { id: 'quantum-computing', title: 'Quantum Computing', desc: 'Qubits, quantum algorithms, and cryptography.', icon: Atom, color: 'text-fuchsia-600 dark:text-fuchsia-400', bgColor: 'bg-fuchsia-50 dark:bg-fuchsia-900/30', topics: ['Quantum Superposition', 'Shor\'s Algorithm', 'Quantum Cryptography'] }
 ];
+
+// تصنيف مخصص للدروس الحرة
+const CUSTOM_CATEGORY = {
+  id: 'custom',
+  title: 'Custom Topic',
+  icon: Sparkles,
+  color: 'text-indigo-600 dark:text-indigo-400',
+  bgColor: 'bg-indigo-100 dark:bg-indigo-900/30',
+  topics: [] // بدون دروس مقترحة
+};
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -82,21 +91,72 @@ const Homepage = () => {
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* Categories Grid - Ultra Premium Redesign */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {CATEGORIES.map((cat, idx) => (
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat)}
-            className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-2xl transition-all duration-300 text-left flex flex-col items-start hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:-translate-y-1"
+            className="group relative bg-white dark:bg-gray-800/80 border border-gray-200/80 dark:border-gray-700/80 p-7 rounded-[2rem] transition-all duration-500 text-left flex flex-col items-start shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(79,70,229,0.15)] hover:border-indigo-300 dark:hover:border-indigo-500/30 hover:-translate-y-2 overflow-hidden w-full"
           >
-            <div className={`p-3 rounded-xl mb-5 ${cat.bgColor} ${cat.color} group-hover:scale-110 transition-transform duration-300 ease-out`}>
-              <cat.icon className="w-6 h-6" />
+            {/* تأثير الوهج السحري في الخلفية عند التمرير */}
+            <div className={`absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 ${cat.bgColor} rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none`}></div>
+
+            {/* الأيقونة بحجم فخم */}
+            <div className={`relative p-4 rounded-2xl ${cat.bgColor} ${cat.color} group-hover:scale-110 transition-transform duration-500 ease-out mb-6 ring-1 ring-black/5 dark:ring-white/10 shadow-sm`}>
+              <cat.icon className="w-7 h-7" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+            
+            {/* العناوين والنصوص */}
+            <h3 className="relative text-xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
               {cat.title}
             </h3>
+            
+            <p className="relative text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium mb-8 line-clamp-2">
+              {cat.desc}
+            </p>
+
+            {/* شريط الإجراء السفلي (البديل الفخم للسهم العلوي) */}
+            <div className="relative mt-auto w-full flex items-center text-sm font-bold text-gray-400 dark:text-gray-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+              <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                Explore Topic
+              </span>
+              <ArrowRight className="w-5 h-5 ml-auto transform group-hover:translate-x-1 transition-transform duration-300" />
+            </div>
           </button>
         ))}
+      </div>
+
+      {/* Custom Topic CTA Section */}
+       {/* Custom Topic CTA Section - Sleek Horizontal Banner */}
+            {/* Modern Centered CTA Section */}
+      <div className="mt-24 mb-10 flex flex-col items-center justify-center text-center px-4">
+        
+        {/* Glowing Icon Wrapper */}
+        <div className="relative mb-6 group cursor-pointer" onClick={() => setSelectedCategory(CUSTOM_CATEGORY)}>
+          <div className="absolute inset-0 bg-indigo-500 blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full"></div>
+          <div className="relative w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-100 dark:border-gray-700 shadow-sm group-hover:-translate-y-1 transition-transform duration-300">
+             <Sparkles className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+          </div>
+        </div>
+
+        <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 tracking-tight">
+          Have a specific topic in mind?
+        </h3>
+        
+        <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8 text-sm md:text-base leading-relaxed">
+          Nibras AI can teach you absolutely anything. Enter any subject, tool, or framework and get a personalized lesson instantly.
+        </p>
+        
+        {/* Modern Pill Button */}
+        <button 
+          onClick={() => setSelectedCategory(CUSTOM_CATEGORY)}
+          className="group flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-indigo-600 dark:hover:bg-indigo-500 font-bold py-3.5 px-8 rounded-full shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 hover:-translate-y-0.5"
+        >
+          <Sparkles className="w-4 h-4 text-indigo-400 dark:text-indigo-600 group-hover:text-white transition-colors" />
+          <span>Create Custom Lesson</span>
+        </button>
+        
       </div>
 
       {/* Exploration Modal */}
@@ -147,36 +207,38 @@ const Homepage = () => {
                 </div>
               </div>
 
-              {/* Curated Topics */}
-              <div className="mb-10">
-                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
-                  Curated Topics
-                </label>
-                <div className="space-y-3">
-                  {selectedCategory.topics.map((topic: string, i: number) => (
-                    <button
-                      key={i}
-                      onClick={() => handleGenerate(topic)}
-                      className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-gray-200 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-indigo-500/50 rounded-xl transition-all duration-200 group text-left"
-                    >
-                      <span className="font-semibold text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300">{topic}</span>
-                      <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transform group-hover:translate-x-1 transition-all" />
-                    </button>
-                  ))}
+              {/* Curated Topics - تظهر فقط إذا كان هناك مواضيع مقترحة */}
+              {selectedCategory.topics && selectedCategory.topics.length > 0 && (
+                <div className="mb-10">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
+                    Curated Topics
+                  </label>
+                  <div className="space-y-3">
+                    {selectedCategory.topics.map((topic: string, i: number) => (
+                      <button
+                        key={i}
+                        onClick={() => handleGenerate(topic)}
+                        className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-gray-200 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-indigo-500/50 rounded-xl transition-all duration-200 group text-left"
+                      >
+                        <span className="font-semibold text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300">{topic}</span>
+                        <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transform group-hover:translate-x-1 transition-all" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Custom Topic Input */}
               <div>
                 <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">
-                  Or Specify Your Own Topic
+                  {selectedCategory.id === 'custom' ? 'What exactly would you like to learn?' : 'Or Specify Your Own Topic'}
                 </label>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <input
                     type="text"
                     value={customTopic}
                     onChange={(e) => setCustomTopic(e.target.value)}
-                    placeholder={`E.g., What is ... in ${selectedCategory.title}?`}
+                    placeholder={selectedCategory.id === 'custom' ? 'E.g., How does the human heart work?' : `E.g., What is ... in ${selectedCategory.title}?`}
                     className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium shadow-sm"
                     onKeyDown={(e) => e.key === 'Enter' && handleGenerate(customTopic)}
                   />
