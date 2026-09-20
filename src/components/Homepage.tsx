@@ -261,19 +261,52 @@ const Homepage = () => {
       )}
 
       {/* Loading Overlay */}
+            {/* Loading Overlay - Premium AI Experience */}
       {isGenerating && (
-        <div className="fixed inset-0 z-[100] bg-white/90 dark:bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-300">
-          <div className="relative mb-8">
-            <div className="absolute inset-0 bg-indigo-500 blur-[40px] opacity-20 dark:opacity-40 rounded-full animate-pulse"></div>
-            <Loader2 className="w-16 h-16 text-indigo-600 dark:text-indigo-400 animate-spin relative z-10" />
+        <div className="fixed inset-0 z-[100] bg-white/80 dark:bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-500">
+          
+          {/* Animated AI Core */}
+          <div className="relative mb-12 flex items-center justify-center">
+            {/* Outer pulsing rings */}
+            <div className="absolute w-32 h-32 bg-indigo-500/20 dark:bg-indigo-500/30 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
+            <div className="absolute w-24 h-24 bg-purple-500/20 dark:bg-purple-500/30 rounded-full animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }}></div>
+            
+            {/* Inner glowing AI Brain */}
+            <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(79,70,229,0.5)] animate-pulse" style={{ animationDuration: '2s' }}>
+              <BrainCircuit className="w-8 h-8 text-white" />
+            </div>
+            
+            {/* Spinning tech ring */}
+            <svg className="absolute w-28 h-28 text-indigo-500/60 animate-spin" viewBox="0 0 100 100" style={{ animationDuration: '8s' }}>
+              <circle cx="50" cy="50" r="48" fill="none" strokeWidth="1.5" strokeDasharray="60 40 10 40" strokeLinecap="round" stroke="currentColor" />
+            </svg>
           </div>
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">Crafting Your Lesson</h2>
-          <p className="text-xl text-gray-600 dark:text-indigo-200/80 max-w-lg mx-auto">
-            Generating personalized content, flashcards, and quizzes on <br/>
-            <span className="font-bold text-gray-900 dark:text-white leading-relaxed inline-block mt-3 bg-indigo-50 dark:bg-indigo-900/30 px-4 py-1.5 rounded-lg border border-indigo-100 dark:border-indigo-500/20 shadow-sm">
-              "{generatingTopic}"
-            </span>
+
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 mb-4 tracking-tight animate-pulse" style={{ animationDuration: '3s' }}>
+            Crafting Your Lesson...
+          </h2>
+          
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-lg mx-auto leading-relaxed">
+            Nibras AI is structuring content, generating flashcards, and building quizzes for:
           </p>
+          
+          {/* Elegant Topic Badge */}
+          <div className="mt-8 relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-30 animate-pulse" style={{ animationDuration: '4s' }}></div>
+            <div className="relative bg-white dark:bg-gray-900 border border-indigo-100 dark:border-indigo-800/60 px-8 py-4 rounded-2xl shadow-sm flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <span className="font-extrabold text-2xl text-gray-900 dark:text-white capitalize tracking-tight">
+                {generatingTopic}
+              </span>
+            </div>
+          </div>
+
+          {/* UX Waiting Hint */}
+          <div className="mt-16 flex items-center gap-3 text-sm font-bold text-gray-400 dark:text-gray-500">
+            <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+            <span>This usually takes 10-15 seconds...</span>
+          </div>
+
         </div>
       )}
     </div>
