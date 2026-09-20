@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import Auth from './components/Auth';
-import LessonForm from './components/LessonForm';
 import LessonView from './components/LessonView';
+import Homepage from './components/Homepage';
 import { 
   GraduationCap, LayoutDashboard, LogOut, Settings, BookOpen, 
   ChevronLeft, ChevronRight, Loader2, BrainCircuit, Trash2, 
   User, Mail, Trophy, Target, Activity, Search, Shield, ArrowLeft,
-  CreditCard, Lock, Bell, Palette
+  Lock, Bell, Palette, Upload, Compass 
 } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
-
-
-import { Upload } from 'lucide-react'; // تأكد من إضافة Upload هنا في أعلى الملف
 
 // استيراد عناصر الرسوم البيانية
 import {
@@ -56,7 +53,6 @@ const DashboardOverview = () => {
           setUserName(userData.user.user_metadata.username);
         }
 
-        // جلب الدروس
         const { data: lessonsData, error: lessonsError } = await supabase
           .from('lessons')
           .select('*')
@@ -64,7 +60,6 @@ const DashboardOverview = () => {
 
         if (lessonsError) throw lessonsError;
 
-        // جلب نتائج الاختبارات
         const { data: testData, error: testError } = await supabase
           .from('test_results')
           .select('score');
@@ -175,13 +170,13 @@ const DashboardOverview = () => {
       <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl p-8 text-white shadow-md flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold mb-2">Welcome back, {userName}!</h2>
-          <p className="text-indigo-100">Ready to learn something new today?</p>
+          <p className="text-indigo-100">Here's a summary of your learning progress.</p>
         </div>
         <button 
-          onClick={() => navigate('/learn')}
+          onClick={() => navigate('/dashboard')}
           className="bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold shadow-sm hover:bg-indigo-50 transition-colors hidden md:block"
         >
-          Create New Lesson
+          Explore Topics
         </button>
       </div>
 
@@ -288,7 +283,7 @@ const DashboardOverview = () => {
   );
 };
 
-// --- 2. MyLessons Component (Polished with Search & Enhanced Cards) ---
+// --- 2. MyLessons Component ---
 const MyLessons = () => {
   const [lessons, setLessons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -360,7 +355,7 @@ const MyLessons = () => {
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl h-64 flex flex-col items-center justify-center shadow-sm">
           <BookOpen className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" />
           <p className="text-gray-400 font-medium text-lg">Your library is empty. Generate a lesson to get started!</p>
-          <button onClick={() => navigate('/learn')} className="mt-4 px-6 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-800/50 transition-colors">Create Lesson</button>
+          <button onClick={() => navigate('/dashboard')} className="mt-4 px-6 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-800/50 transition-colors">Create Lesson</button>
         </div>
       ) : filteredLessons.length === 0 ? (
         <div className="text-center py-12 text-gray-500 dark:text-gray-400">No lessons found matching "{searchTerm}".</div>
@@ -388,7 +383,6 @@ const MyLessons = () => {
                 <span className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">
                   {new Date(lesson.created_at).toLocaleDateString()}
                 </span>
-                {/* Auto-width category pill */}
                 <span className="inline-flex w-fit bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-800/50 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 text-xs font-extrabold px-3 py-1.5 rounded-lg uppercase tracking-wider transition-colors duration-300">
                   {lesson.category || 'General'}
                 </span>
@@ -425,15 +419,11 @@ const MyLessons = () => {
   );
 };
 
-
-
-// --- 3. SettingsPage Component (Redesigned & Functional with Upload) ---
-// --- 3. SettingsPage Component (Redesigned & Functional with Upload + Reset Password) ---
+// --- 3. SettingsPage Component ---
 const SettingsPage = () => {
   const [isEditingPassword, setIsEditingPassword] = useState(false);
-    const [newPassword, setNewPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [updatingPassword, setUpdatingPassword] = useState(false);
-
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -545,7 +535,8 @@ const SettingsPage = () => {
       </div>
     );
   }
-    const handleUpdatePassword = async () => {
+
+  const handleUpdatePassword = async () => {
     if (!newPassword || newPassword.length < 6) {
       alert("Password must be at least 6 characters.");
       return;
@@ -563,6 +554,7 @@ const SettingsPage = () => {
       setUpdatingPassword(false);
     }
   };
+
   return (
     <div className="max-w-3xl mx-auto pb-12">
       <div className="mb-8">
@@ -662,7 +654,6 @@ const SettingsPage = () => {
               </div>
 
               {/* Security & Password Update Section */}
-                            {/* Security & Password Update Section */}
               <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 transition-all">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
@@ -799,49 +790,6 @@ const SettingsPage = () => {
   );
 };
 
-// --- Learn Route ---
-// --- Learn Route ---
-const LearnLayout = ({ session }: { session: Session | null }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
-          <GraduationCap className="w-8 h-8" />
-          <span className="text-xl font-bold text-gray-900 dark:text-white">AI Learning</span>
-        </div>
-        
-        {/* التعديل هنا: فحص هل هو مسجل دخول أم ضيف */}
-        {/* زر العودة بتصميم احترافي مع سهم */}
-        <Link 
-          to={session ? "/dashboard" : "/"} 
-          className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-800 font-bold text-sm rounded-xl transition-all shadow-sm border border-gray-200 dark:border-gray-700"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {session ? "Dashboard" : "Back to Registration"}
-        </Link>
-      </nav>
-      <main className="max-w-4xl mx-auto px-6 py-12 flex flex-col items-center justify-center min-h-[80vh]">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Generate Your Lesson</h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-            Select a category and topic, and our AI will generate personalized flashcards, a summary, and an MCQ test just for you.
-          </p>
-        </div>
-        <div className="w-full max-w-2xl bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <LessonForm onSubmit={(data) => {
-            if (data && data.lesson_id) {
-              navigate(`/dashboard/lessons/${data.lesson_id}`);
-            }
-          }} />
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// --- Protected Dashboard Route (Layout) ---
 // --- Protected Dashboard Route (Layout) ---
 const DashboardLayout = ({ session }: { session: Session }) => {
   const location = useLocation();
@@ -860,7 +808,8 @@ const DashboardLayout = ({ session }: { session: Session }) => {
     if (location.pathname.includes('/lessons/')) return 'Lesson Viewer';
     if (location.pathname.includes('/lessons')) return 'My Library';
     if (location.pathname.includes('/settings')) return 'Account Settings';
-    return 'Dashboard Overview';
+    if (location.pathname.includes('/analytics')) return 'Dashboard Analytics';
+    return 'Explore & Create';
   };
 
   const userEmail = session.user.email || '';
@@ -885,8 +834,12 @@ const DashboardLayout = ({ session }: { session: Session }) => {
         
         <nav className="flex-1 py-4 space-y-2 flex flex-col">
           <NavLink to="/dashboard" end className={navLinkClass}>
+            <Compass className="w-5 h-5 flex-shrink-0" />
+            {isSidebarOpen && <span className="whitespace-nowrap">Explore</span>}
+          </NavLink>
+          <NavLink to="/dashboard/analytics" end className={navLinkClass}>
             <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
-            {isSidebarOpen && <span className="whitespace-nowrap">Overview</span>}
+            {isSidebarOpen && <span className="whitespace-nowrap">Analytics</span>}
           </NavLink>
           <NavLink to="/dashboard/lessons" end className={navLinkClass}>
             <BookOpen className="w-5 h-5 flex-shrink-0" />
@@ -913,7 +866,7 @@ const DashboardLayout = ({ session }: { session: Session }) => {
         <header className="bg-white dark:bg-gray-800 px-8 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 z-10 shadow-sm">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{getPageTitle()}</h1>
           <div className="flex items-center gap-6">
-            <Link to="/learn" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm text-sm whitespace-nowrap">
+            <Link to="/dashboard" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm text-sm whitespace-nowrap">
               + New Lesson
             </Link>
             <div className="h-8 w-px bg-gray-200 dark:bg-gray-700 hidden md:block"></div>
@@ -923,7 +876,6 @@ const DashboardLayout = ({ session }: { session: Session }) => {
                 <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{userEmail}</p>
               </div>
               
-              {/* تعديل مساحة الصورة الشخصية هنا */}
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-sm flex-shrink-0 overflow-hidden border-2 border-white dark:border-gray-800">
                 {userAvatar ? (
                   <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -942,9 +894,6 @@ const DashboardLayout = ({ session }: { session: Session }) => {
     </div>
   );
 };
-
-
-
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -982,9 +931,11 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={session ? <Navigate to="/dashboard" replace /> : <Auth />} />
-                <Route path="/learn" element={<LearnLayout session={session} />} />
+        
+        {/* Dashboard routes */}
         <Route path="/dashboard" element={session ? <DashboardLayout session={session} /> : <Navigate to="/" replace />}>
-          <Route index element={<DashboardOverview />} />
+          <Route index element={<Homepage />} />
+          <Route path="analytics" element={<DashboardOverview />} />
           <Route path="lessons" element={<MyLessons />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="lessons/:id" element={<LessonView />} />
