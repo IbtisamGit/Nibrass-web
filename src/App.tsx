@@ -781,6 +781,7 @@ const SettingsPage = () => {
 // --- Protected Dashboard Route (Layout) ---
 const DashboardLayout = ({ session }: { session: Session }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleLogout = async () => {
@@ -851,8 +852,19 @@ const DashboardLayout = ({ session }: { session: Session }) => {
       </aside>
 
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white dark:bg-gray-800 px-8 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 z-10 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{getPageTitle()}</h1>
+        <header className="bg-white dark:bg-gray-800 px-4 md:px-8 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+          <div className="flex items-center gap-4">
+            {location.pathname !== '/dashboard' && (
+              <button 
+                onClick={() => navigate('/dashboard')}
+                className="p-2 -ml-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl transition-colors"
+                title="Back to Dashboard"
+              >
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+            )}
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{getPageTitle()}</h1>
+          </div>
           <div className="flex items-center gap-6">
             <Link to="/dashboard" className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm text-sm whitespace-nowrap">
               + New Lesson
