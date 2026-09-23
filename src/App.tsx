@@ -916,6 +916,7 @@ function App() {
   }
 
   return (
+    <React.Fragment>
     <Router>
       <Routes>
         <Route path="/" element={session ? <Navigate to="/dashboard" replace /> : <Auth />} />
@@ -930,6 +931,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    </React.Fragment>
   );
 }
 

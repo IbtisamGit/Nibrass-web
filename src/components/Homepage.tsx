@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { 
@@ -77,6 +77,7 @@ const Homepage = () => {
   };
 
   return (
+    <React.Fragment>
     <div className="w-full pb-12 font-sans animate-in fade-in duration-500">
       
       {/* Transformed Hero Section */}
@@ -310,6 +311,7 @@ const Homepage = () => {
         </div>
       )}
     </div>
+    </React.Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { ArrowLeft, BookOpen, Layers, CheckSquare, Loader2, AlertCircle, RotateCcw, Clock, PlayCircle, Keyboard } from 'lucide-react';
@@ -191,6 +191,7 @@ const LessonView = () => {
   const contentSections = lesson.content_sections || [];
 
   return (
+    <React.Fragment>
     <div className="w-full px-6 lg:px-12 pb-12">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
@@ -560,6 +561,7 @@ const LessonView = () => {
 
       </div>
     </div>
+    </React.Fragment>
   );
 };
 
