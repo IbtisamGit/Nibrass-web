@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { ArrowLeft, BookOpen, Layers, CheckSquare, Loader2, AlertCircle, RotateCcw, Clock, PlayCircle, ChevronLeft, Keyboard } from 'lucide-react';
+import { ArrowLeft, BookOpen, Layers, CheckSquare, Loader2, AlertCircle, RotateCcw, Clock, PlayCircle, Keyboard } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 const LessonView = () => {

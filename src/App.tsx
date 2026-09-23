@@ -7,8 +7,8 @@ import Homepage from './components/Homepage';
 import { 
   GraduationCap, LayoutDashboard, LogOut, Settings, BookOpen, 
   ChevronLeft, ChevronRight, Loader2, BrainCircuit, Trash2, 
-  User, Mail, Trophy, Target, Activity, Search, Shield, ArrowLeft,
-  Lock, Bell, Palette, Upload, Compass 
+  User, Target, Activity, Search, Shield, ArrowLeft,
+  Lock, Palette, Upload, Compass 
 } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 
@@ -513,18 +513,6 @@ const SettingsPage = () => {
       alert(error.message);
     } finally {
       setSaving(false);
-    }
-  };
-
-  // دالة إرسال بريد إعادة تعيين كلمة المرور
-  const handleResetPassword = async () => {
-    if (!email) return;
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) throw error;
-      alert("Password reset email sent! Please check your inbox.");
-    } catch (error: any) {
-      alert(error.message);
     }
   };
 
