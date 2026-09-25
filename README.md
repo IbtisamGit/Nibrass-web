@@ -1,75 +1,15 @@
-# React + TypeScript + Vite
+# Nibras AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nibras AI is an intelligent, personalized learning platform that empowers users to master any topic instantly. By simply typing a topic or selecting from curated fields, Nibras AI dynamically generates comprehensive, interactive lessons tailored to the user's selected difficulty level.
 
-Currently, two official plugins are available:
+Built with a focus on modern UX/UI, Nibras AI transforms static reading into an engaging educational journey.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Key Features
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- **On-Demand Lesson Generation:** Generate complete, structured lessons on absolutely any topic in seconds using AI.
+- **Adaptive Difficulty:** Choose between Beginner, Medium, or Hard to get content tailored exactly to your current understanding.
+- **Interactive Flashcards:** Reinforce your memory with auto-generated, interactive flashcards.
+- **Smart Quizzes:** Test your knowledge immediately with AI-crafted Multiple Choice Questions (MCQs) and receive instant feedback.
+- **Premium User Experience:** Enjoy a beautiful, modern SaaS interface with smooth animations, dark/light mode support, and a mesmerizing AI generation screen.
+- **Personalized Dashboard:** Track your learning progress, review your library of saved lessons, and visualize your knowledge distribution with detailed analytics charts.
+- **Customizable AI Preferences:** Tailor the AI's teaching language and explanation tone (Academic, Casual, or 'Explain Like I'm 5') to suit your learning style.
