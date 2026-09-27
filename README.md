@@ -4,11 +4,6 @@ Nibras AI is an intelligent, personalized learning platform that empowers users 
 
 Built with a focus on modern UX/UI, Nibras AI transforms static reading into an engaging educational journey.
 
-## Key Features 
-- **On-Demand Lesson Generation:** Generate complete, structured lessons on absolutely any topic in seconds using AI.
-- **Adaptive Difficulty:** Choose between Beginner, Medium, or Hard to get content tailored exactly to your current understanding.
-- **Interactive Flashcards:** Reinforce your memory with auto-generated, interactive flashcards (spaced repetition style).
-=======
 ## Key Features
 
 - **On-Demand Lesson Generation:** Generate complete, structured lessons on absolutely any topic in seconds using AI.
@@ -24,4 +19,3 @@ Built with a focus on modern UX/UI, Nibras AI transforms static reading into an 
 - **Backend/Database:** Supabase (Auth, PostgreSQL, Edge Functions).
 - **AI Integration:** OpenAI API.
 - **Build Tool/Hosting:** Vite & Vercel.
-=======
