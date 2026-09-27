@@ -887,8 +887,20 @@ const DashboardLayout = ({ session }: { session: Session }) => {
             </div>
           </div>
         </header>
-        <div className="p-8 flex-1 overflow-auto">
-          <Outlet />
+        <div className="p-8 flex-1 overflow-auto flex flex-col">
+          <div className="flex-1">
+            <Outlet />
+          </div>
+          
+          {/* Copyright - LTR forced to avoid RTL bugs */}
+          <div className="flex flex-col items-center justify-center gap-1.5 mt-12 pt-8 border-t border-gray-100 dark:border-gray-800" dir="ltr">
+            <p className="text-sm text-slate-400 dark:text-slate-500">
+              © {new Date().getFullYear()} Nibras AI. All rights reserved.
+            </p>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              Built by Ibtisam
+            </p>
+          </div>
         </div>
       </main>
     </div>
